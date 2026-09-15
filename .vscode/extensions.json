@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "cweijan.vscode-mysql-client2",
+    "humao.rest-client",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "mikestead.dotenv",
+    "editorconfig.editorconfig"
+  ]
+}

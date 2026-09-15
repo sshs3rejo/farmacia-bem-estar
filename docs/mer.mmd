@@ -1,0 +1,74 @@
+%% MER - Farmácia Bem-Estar (modelo conceitual)
+flowchart TB
+    Cat["Categoria"]
+    Fab["Fabricante"]
+    For["Fornecedor"]
+    Pro["Produto"]
+    Est["EstoqueLote"]
+    Itm["ItemVenda"]
+    Cli["Cliente"]
+    Fun["Funcionario"]
+    Ven["Venda"]
+    Rec["Receita"]
+
+    R1{"Classifica"}
+    R2{"Fabrica"}
+    R3{"Fornece"}
+    R4{"Possui"}
+    R5{"Compoem"}
+    R6{"Inclui"}
+    R7{"Realiza"}
+    R8{"Atende"}
+    R9{"Exige"}
+    R10{"Relaciona"}
+
+    Cat -- "1" --> R1
+    R1 -- "N" --> Pro
+
+    Fab -- "1" --> R2
+    R2 -- "N" --> Pro
+
+    For -- "1" --> R3
+    R3 -- "N" --> Pro
+
+    Pro -- "1" --> R4
+    R4 -- "N" --> Est
+
+    Pro -- "1" --> R6
+    R6 -- "N" --> Itm
+
+    Ven -- "1" --> R5
+    R5 -- "N" --> Itm
+
+    Cli -- "1" --> R7
+    R7 -- "N" --> Ven
+
+    Fun -- "1" --> R8
+    R8 -- "N" --> Ven
+
+    Ven -- "1" --> R9
+    R9 -- "1" --> Rec
+
+    Pro -- "1" --> R10
+    R10 -- "N" --> Rec
+
+    style Cat fill:#ffffff,stroke:#000000,color:#000000
+    style Fab fill:#ffffff,stroke:#000000,color:#000000
+    style For fill:#ffffff,stroke:#000000,color:#000000
+    style Pro fill:#ffffff,stroke:#000000,color:#000000
+    style Est fill:#ffffff,stroke:#000000,color:#000000
+    style Itm fill:#ffffff,stroke:#000000,color:#000000
+    style Cli fill:#ffffff,stroke:#000000,color:#000000
+    style Fun fill:#ffffff,stroke:#000000,color:#000000
+    style Ven fill:#ffffff,stroke:#000000,color:#000000
+    style Rec fill:#ffffff,stroke:#000000,color:#000000
+    style R1 fill:#ffffff,stroke:#000000,color:#000000
+    style R2 fill:#ffffff,stroke:#000000,color:#000000
+    style R3 fill:#ffffff,stroke:#000000,color:#000000
+    style R4 fill:#ffffff,stroke:#000000,color:#000000
+    style R5 fill:#ffffff,stroke:#000000,color:#000000
+    style R6 fill:#ffffff,stroke:#000000,color:#000000
+    style R7 fill:#ffffff,stroke:#000000,color:#000000
+    style R8 fill:#ffffff,stroke:#000000,color:#000000
+    style R9 fill:#ffffff,stroke:#000000,color:#000000
+    style R10 fill:#ffffff,stroke:#000000,color:#000000

@@ -1,0 +1,100 @@
+%% DER - Farmácia Bem-Estar (modelo lógico)
+erDiagram
+    Categoria ||--o{ Produto : "categoriza"
+    Fabricante ||--o{ Produto : "fabrica"
+    Fornecedor ||--o{ Produto : "fornece"
+    Produto ||--o{ EstoqueLote : "tem lotes"
+    Cliente ||--o{ Venda : "realiza"
+    Funcionario ||--o{ Venda : "atende"
+    Venda ||--|{ ItemVenda : "possui itens"
+    Produto ||--o{ ItemVenda : "compõe"
+    Venda ||--o| Receita : "exige (controlado)"
+    Produto ||--o{ Receita : "consta em"
+
+    Categoria {
+        int id_categoria PK
+        varchar nome UK
+        varchar descricao
+    }
+    Fabricante {
+        int id_fabricante PK
+        varchar nome
+        varchar cnpj UK
+        varchar telefone
+        varchar email
+    }
+    Fornecedor {
+        int id_fornecedor PK
+        varchar razao_social
+        varchar nome_fantasia
+        varchar cnpj UK
+        varchar telefone
+        varchar email
+        varchar endereco
+    }
+    Cliente {
+        int id_cliente PK
+        varchar nome
+        varchar cpf UK
+        date data_nascimento
+        varchar telefone
+        varchar email
+        varchar endereco
+    }
+    Funcionario {
+        int id_funcionario PK
+        varchar nome
+        varchar cpf UK
+        enum cargo
+        decimal salario
+        varchar telefone
+        varchar email
+        date data_admissao
+    }
+    Produto {
+        int id_produto PK
+        varchar nome
+        varchar apresentacao
+        int id_categoria FK
+        int id_fabricante FK
+        int id_fornecedor FK
+        decimal preco_venda
+        tinyint receita_controlada
+        enum status
+    }
+    EstoqueLote {
+        int id_lote PK
+        int id_produto FK
+        varchar numero_lote UK
+        int quantidade
+        decimal preco_custo
+        date data_fabricacao
+        date data_validade
+    }
+    Venda {
+        int id_venda PK
+        int id_cliente FK
+        int id_funcionario FK
+        datetime data_hora
+        enum forma_pagamento
+        decimal desconto
+        decimal total
+    }
+    ItemVenda {
+        int id_item PK
+        int id_venda FK
+        int id_produto FK
+        int quantidade
+        decimal preco_unitario
+        decimal subtotal
+    }
+    Receita {
+        int id_receita PK
+        int id_venda FK
+        int id_produto FK
+        varchar nome_medico
+        varchar crm_medico
+        char uf_crm
+        date data_emissao
+        varchar observacao
+    }

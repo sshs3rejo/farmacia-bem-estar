@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmácia Bem-Estar — Sistema de Vendas</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Farmácia Bem-Estar</h1>
+    </header>
+
+    <nav id="nav">
+      <button data-tab="vendas" class="active">Vendas</button>
+      <button data-tab="clientes">Clientes</button>
+      <button data-tab="produtos">Produtos</button>
+      <button data-tab="catalogo">Catálogo</button>
+      <button data-tab="funcionarios">Funcionários</button>
+      <button data-tab="estoque">Estoque</button>
+      <button data-tab="receitas">Receitas</button>
+      <button data-tab="relatorios">Relatórios</button>
+    </nav>
+
+    <main>
+      <!-- ==================== VENDAS ==================== -->
+      <section id="tab-vendas" class="tab active">
+        <h2>Vendas</h2>
+        <div class="toolbar">
+          <button id="btn-nova-venda">+ Nova Venda</button>
+          <button id="btn-voltar-vendas" class="hidden">Voltar</button>
+        </div>
+
+        <div id="vendas-painel">
+          <table id="tbl-vendas">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Data/Hora</th>
+                <th>Cliente</th>
+                <th>Funcionário</th>
+                <th>Pagamento</th>
+                <th>Desconto</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div id="venda-form" class="hidden panel">
+          <h3>Nova Venda</h3>
+          <div class="grid">
+            <label
+              >Cliente
+              <select id="vf-cliente"></select>
+            </label>
+            <label
+              >Funcionário
+              <select id="vf-funcionario"></select>
+            </label>
+            <label
+              >Forma de pagamento
+              <select id="vf-pagamento">
+                <option value="pix">Pix</option>
+                <option value="dinheiro">Dinheiro</option>
+                <option value="cartao_debito">Cartão de Débito</option>
+                <option value="cartao_credito">Cartão de Crédito</option>
+              </select>
+            </label>
+            <label
+              >Desconto (R$)
+              <input type="number" id="vf-desconto" value="0" min="0" step="0.01" />
+            </label>
+          </div>
+
+          <h4>Itens</h4>
+          <div id="vf-itens"></div>
+          <button id="btn-add-item" type="button">+ Adicionar item</button>
+
+          <fieldset id="vf-receita" class="hidden">
+            <legend>Receita (medicamento controlado)</legend>
+            <div class="grid">
+              <label>Nome do médico <input id="vf-nome-medico" /></label>
+              <label>CRM <input id="vf-crm-medico" placeholder="CRM 00000" /></label>
+              <label>UF <input id="vf-uf-crm" maxlength="2" placeholder="MA" /></label>
+              <label>Data de emissão <input type="date" id="vf-data-emissao" /></label>
+            </div>
+            <label>Observação <input id="vf-obs-receita" /></label>
+          </fieldset>
+
+          <p class="total-prev">Total: <strong id="vf-total">R$ 0,00</strong></p>
+          <div class="toolbar">
+            <button id="btn-confirmar-venda" class="primary">Confirmar venda</button>
+            <button id="btn-cancelar-venda">Cancelar</button>
+          </div>
+          <p id="vf-mensagem" class="msg"></p>
+        </div>
+
+        <div id="venda-detalhe" class="hidden panel">
+          <h3 id="vd-titulo">Detalhe da venda</h3>
+          <div id="vd-corpo"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CLIENTES ==================== -->
+      <section id="tab-clientes" class="tab">
+        <h2>Clientes</h2>
+        <form id="form-cliente" class="panel">
+          <input type="hidden" id="cliente-id" />
+          <div class="grid">
+            <label>Nome <input id="cliente-nome" required /></label>
+            <label
+              >CPF <input id="cliente-cpf" required maxlength="11" placeholder="somente números"
+            /></label>
+            <label>Data de nascimento <input type="date" id="cliente-nasc" /></label>
+            <label>Telefone <input id="cliente-tel" /></label>
+            <label>E-mail <input type="email" id="cliente-email" /></label>
+            <label>Endereço <input id="cliente-end" /></label>
+          </div>
+          <button type="button" id="btn-salvar-cliente" class="primary">Salvar</button>
+          <button type="button" id="btn-limpar-cliente">Limpar</button>
+          <span id="msg-cliente" class="msg"></span>
+        </form>
+        <table id="tbl-clientes">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Nascimento</th>
+              <th>Telefone</th>
+              <th>E-mail</th>
+              <th>Endereço</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== PRODUTOS ==================== -->
+      <section id="tab-produtos" class="tab">
+        <h2>Produtos</h2>
+        <form id="form-produto" class="panel">
+          <input type="hidden" id="produto-id" />
+          <div class="grid">
+            <label>Nome <input id="produto-nome" required /></label>
+            <label>Apresentação <input id="produto-apes" /></label>
+            <label
+              >Categoria
+              <select id="produto-cat"></select
+            ></label>
+            <label
+              >Fabricante
+              <select id="produto-fab"></select
+            ></label>
+            <label
+              >Fornecedor
+              <select id="produto-forn"></select
+            ></label>
+            <label
+              >Preço de venda (R$)
+              <input type="number" id="produto-preco" min="0" step="0.01" required
+            /></label>
+            <label
+              ><input type="checkbox" id="produto-controlado" /> Requer receita (controlado)</label
+            >
+            <label
+              >Status
+              <select id="produto-status">
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+              </select></label
+            >
+          </div>
+          <button type="button" id="btn-salvar-produto" class="primary">Salvar</button>
+          <button type="button" id="btn-limpar-produto">Limpar</button>
+          <span id="msg-produto" class="msg"></span>
+        </form>
+        <table id="tbl-produtos">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Apresentação</th>
+              <th>Categoria</th>
+              <th>Fabricante</th>
+              <th>Preço</th>
+              <th>Controlado</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== CATÁLOGO ==================== -->
+      <section id="tab-catalogo" class="tab">
+        <h2>Catálogo</h2>
+        <h3>Categorias</h3>
+        <table id="tbl-categorias">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h3>Fabricantes</h3>
+        <table id="tbl-fabricantes">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>CNPJ</th>
+              <th>Telefone</th>
+              <th>E-mail</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h3>Fornecedores</h3>
+        <table id="tbl-fornecedores">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Razão social</th>
+              <th>Nome fantasia</th>
+              <th>CNPJ</th>
+              <th>Telefone</th>
+              <th>E-mail</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== FUNCIONÁRIOS ==================== -->
+      <section id="tab-funcionarios" class="tab">
+        <h2>Funcionários</h2>
+        <table id="tbl-funcionarios">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Cargo</th>
+              <th>Salário</th>
+              <th>Telefone</th>
+              <th>Admissão</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== ESTOQUE ==================== -->
+      <section id="tab-estoque" class="tab">
+        <h2>Estoque (lotes)</h2>
+        <table id="tbl-estoque">
+          <thead>
+            <tr>
+              <th>Lote</th>
+              <th>Produto</th>
+              <th>Nº lote</th>
+              <th>Qtd</th>
+              <th>Custo</th>
+              <th>Fabricação</th>
+              <th>Validade</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== RECEITAS ==================== -->
+      <section id="tab-receitas" class="tab">
+        <h2>Receitas (controlados)</h2>
+        <table id="tbl-receitas">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Venda</th>
+              <th>Produto</th>
+              <th>Médico</th>
+              <th>CRM</th>
+              <th>Emissão</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- ==================== RELATÓRIOS ==================== -->
+      <section id="tab-relatorios" class="tab">
+        <h2>Relatórios</h2>
+        <div class="panel">
+          <h3>Estoque baixo (total &lt; 20)</h3>
+          <table id="tbl-rel-estoque">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Estoque total</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3>Validade próxima (90 dias)</h3>
+          <table id="tbl-rel-validade">
+            <thead>
+              <tr>
+                <th>Lote</th>
+                <th>Produto</th>
+                <th>Qtd</th>
+                <th>Validade</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3>Vendas por período</h3>
+          <div class="grid">
+            <label>De <input type="date" id="rel-de" /></label>
+            <label>Até <input type="date" id="rel-ate" /></label>
+            <button id="btn-rel-periodo" class="primary">Consultar</button>
+          </div>
+          <table id="tbl-rel-vendas">
+            <thead>
+              <tr>
+                <th>Dia</th>
+                <th>Vendas</th>
+                <th>Faturamento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Farmácia Bem-Estar &copy; 2026</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
